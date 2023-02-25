@@ -1,34 +1,62 @@
 <html>
 	<head>
-		<script src="GameScript.js"></script>
-		<link rel="stylesheet" href="GameStyle.css"/>
-
 		<title>Imposter Stomper</title>
-		<link rel="icon" type="image/x-icon" href="rainbowBouncingAmogus.gif">
+		<link rel="icon" type="image/x-icon" href="Gifs/Rainbow.gif">
 	</head>
+
 	<body>
-		<p style="text-align: center; font-size: 70px; font-weight: 700; position: relative; top: 40;">Imposter Stomper</p>
-		<details style="text-align: center; font-size: 20px; font-weight: 500;">
-			<summary>how to play</summary>
-			<span>
-				you are the rainbow amogus<br>
-				use arrow keys or buttons to move<br>
-				don't let the red amogus touch you<br>
-				stomp on it to kill it and gain score<br>
-				get 10 score and 500 size for prize :)
-			</span>
-		</details>
+		<div id="menu" class="item" style="position: absolute; top: 50%; left: 50%;">
+			<p style="margin: 0px; margin-bottom: 60px; font-size: 70px; font-weight: 700;">Imposter Stomper</p>
+			<button class="menuButton" onClick="gameStart(0)">Single Player</button><br>
+			<button class="menuButton" onClick="gameStart(1)">Two Player</button><br>
+			<button class="menuButton" onClick="gameStart(2)">PVP</button><br>
+			<button class="menuButton" onClick="document.getElementById('howToPlay').style.display = 'block'">How To Play</button>
+			<div id="howToPlay" class="item" style="position: absolute; top: 50%; left: 50%; display: none;">
+				<p style="font-size: 23px; font-weight: 500; width: 550px; height: 300px;">
+					Battle against the imposters and survive for as long as you can! 
+					To defeat an imposter, jump up and stomp on it for as long as possible.<br><br>
+					Single player: allows you to fight the imposters in stages<br>
+					Two player: just like single player, but with a friend<br>
+					PVP: allows you to battle a friend to see who is the strongest Imposter Stomper!<br><br>
+					Player 1 movement: WASD<br>Player 2 movement: arrow keys<br>
+				</p>
+				<br>
+				<button class="menuButton" onClick="document.getElementById('howToPlay').style.display = 'none'">Close</button>
+			</div>
+		</div>
 
-		<p id="score" style="font-size: 20px; font-weight: 500; position: absolute; bottom: 0; left: 20;">Score: 0</p>
-		<p id="size" style="font-size: 20px; font-weight: 500; position: absolute; bottom: 0; right: 20;">Size: 50</p>
+		<div id="game" style="display: none;">
+			<div id="arena" class="item" style="border: none; padding: 10px; position: absolute; top: 50%; left: 50%;">
+				<canvas id="healthBar" style="position: absolute; display: none; background-color: #660000;" height="5"></canvas>
 
-		<button class="gameButton" onClick="jump()" style="position:absolute; left: 40; top: 40;">jump</button><br>
-		<button class="gameButton" onClick="left()" style="position:absolute; left: 40; top: 140;">left</button>
+				<img src="Gifs/Red.gif" id="Red" style="position: absolute; display: none;">
+				<img src="Gifs/Orange.gif" id="Orange" style="position: absolute; display: none;">
+				<img src="Gifs/Yellow.gif" id="Yellow" style="position: absolute; display: none;">
+				<img src="Gifs/Lime.gif" id="Lime" style="position: absolute; display: none;">
+				<img src="Gifs/Green.gif" id="Green" style="position: absolute; display: none;">
+				<img src="Gifs/Cyan.gif" id="Cyan" style="position: absolute; display: none;">
+				<img src="Gifs/Blue.gif" id="Blue" style="position: absolute; display: none;">
+				<img src="Gifs/Purple.gif" id="Purple" style="position: absolute; display: none;">
+				<img src="Gifs/Pink.gif" id="Pink" style="position: absolute; display: none;">
+				<img src="Gifs/White.gif" id="White" style="position: absolute; display: none;">
+				<img src="Gifs/Brown.gif" id="Brown" style="position: absolute; display: none;">
+				<img src="Gifs/Black.gif" id="Black" style="position: absolute; display: none;">
+				<img src="Gifs/Rainbow.gif" id="Secret" style="position: absolute; display: none;">
+			</div>
 
-		<button class="gameButton" onClick="jump()" style="position:absolute; right: 40; top: 40;">jump</button><br>
-		<button class="gameButton" onClick="right()" style="position:absolute; right: 40; top: 140;">right</button>
+			<button id="pauseButton" class="menuButton" onClick="gameTogglePause()" style="font-size: 3.5vh; margin: 1.5vh; width: 15vh; height: 6vh; border-width: 0.5vh; border-radius: 1vh; position: absolute; top: 0; left: 0;">Pause</button>
+			<button class="menuButton" onClick="gameEnd()" style="font-size: 3.5vh; margin: 1.5vh; width: 15vh; height: 6vh; border-width: 0.5vh; border-radius: 1vh; position: absolute; top: 0; right: 0;">Exit</button>
+			<p id="stageText" style="font-size: 6vh; font-weight: 500; text-align: center;">Stage 1</p>
+			<p id="leftText" style="font-size: 2.5vh; font-weight: 500; position: absolute; bottom: 0; left: 3vh;"></p>
+			<p id="rightText" style="font-size: 2.5vh; font-weight: 500; position: absolute; bottom: 0; right: 3vh;"></p>
 
-		<img src="red.gif" id="enemy" style="position:absolute; right: 0; top: -50;" width="50px" height="50px">
-		<img src="rainbowBouncingAmogus.gif" id="player" style="position:absolute; left: 0; top: -50;" width="50px" height="50px">
+			<div id="pauseMenu" class="item" style="display: none; position: absolute; top: 50%; left: 50%;">
+				<p style="font-size: 10vh; font-weight: 500; text-align: center;">Game Is Paused</p>
+			</div>
+		</div>
+
+		<script src="Amogus.js"></script>
+		<script src="GameScript.js"></script>
+		<link rel="stylesheet" href="GameStyle.css">
 	</body>
 </html>
