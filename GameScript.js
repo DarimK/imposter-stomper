@@ -1,130 +1,311 @@
-//work in progress so some comments and features are missing
-setInterval(gameTick, 20); // framerate
+// Game variables
+const sprites = [document.getElementById('healthBar'), document.getElementById('Red'), document.getElementById('Orange'), document.getElementById('Yellow'), document.getElementById('Lime'), document.getElementById('Green'), document.getElementById('Cyan'), document.getElementById('Blue'), document.getElementById('Purple'), document.getElementById('Pink'), document.getElementById('White'), document.getElementById('Brown'), document.getElementById('Black'), document.getElementById('Secret')];
+const arena = document.getElementById('arena');
+var arenaWidth = window.innerWidth * 0.9;
+var arenaHeight = window.innerHeight * 0.8;
+var player1;
+var player2;
+var enemies = [];
+var clones = [];
+var interval;
+var keys = [0, 0, 0, 0, 0, 0, 0, 0];
+var gameMode;
+var player1Kills = 0;
+var player2Kills = 0;
+var stage = 0;
+var aliveEnemies = 0;
+var enemyLeftMove = [];
 
-var pVelX = 10;
-var pVelY = 0;
-var pSize = 50;
-var eVelX = -8;
-var eVelY = 0;
-var eSize = 50;
-var ground = Math.floor(window.innerHeight / 20) * 20;
-var score = 0;
-var amogus = true;
 
-function touching ()
+// Checks which keys have been pressed
+document.addEventListener('keydown', function (event)
 {
-	pPosX = document.getElementById('player').offsetLeft + pSize / 2
-	pPosY = document.getElementById('player').offsetTop + pSize / 2
-	
-	ePosX = document.getElementById('enemy').offsetLeft + eSize / 2
-	ePosY = document.getElementById('enemy').offsetTop + eSize / 2
-
-	if (Math.abs(pPosX - ePosX) < (pSize + eSize) / 2 && Math.abs(pPosY - ePosY) < (pSize + eSize) / 2)
-	{
-		if (pPosY + pSize / 2 - eSize < ePosY && pVelY > 5 + eVelY) { return 2; }
-		return 0;
-	}
-	else { return 1; }
-}
-
-function pMove () // handles all player movements
-{
-	pVelX -= (pVelX / Math.abs(pVelX)) / 5; // slow x movements
-	if (document.getElementById('player').offsetTop + pSize < ground) { pVelY += 1; } // gravity (stops at ground line)
-	else if (pVelY > 0) { pVelY = 0; document.getElementById('player').style.top = ground - pSize; } // stops gravity
-
-	if (pVelX >= -1) { document.getElementById('player').style.transform = 'scaleX(1)'; } // face right when moving right
-	else { document.getElementById('player').style.transform = 'scaleX(-1)'; } // face left when moving left
-
-	document.getElementById('player').style.left = document.getElementById('player').offsetLeft + pVelX + "px"; // change x position
-	document.getElementById('player').style.top = document.getElementById('player').offsetTop + pVelY + "px"; // change y position
-
-	if (document.getElementById('player').offsetLeft + pSize <= 0 && pVelX < 0) { document.getElementById('player').style.left = window.innerWidth + "px"; }
-	if (document.getElementById('player').offsetLeft >= window.innerWidth && pVelX > 0) { document.getElementById('player').style.left = 0 - pSize + "px"; }
-}
-
-function eMove () // handles all enemy movements
-{
-	if (document.getElementById('enemy').offsetTop + eSize >= ground && Math.floor(Math.random() * 75) == 0) { eVelY -= 25; }
-	if (Math.floor(Math.random() * 90) == 0) { eVelX *= -1 }
-
-	if (document.getElementById('enemy').offsetTop + eSize < ground) { eVelY += 1; } // gravity (stops at ground line)
-	else if (eVelY > 0) { eVelY = 0; document.getElementById('enemy').style.top = ground - eSize; } // stops gravity
-
-	if (eVelX >= -1) { document.getElementById('enemy').style.transform = 'scaleX(1)'; } // face right when moving right
-	else { document.getElementById('enemy').style.transform = 'scaleX(-1)'; } // face left when moving left
-
-	document.getElementById('enemy').style.left = document.getElementById('enemy').offsetLeft + eVelX + "px"; // change x position
-	document.getElementById('enemy').style.top = document.getElementById('enemy').offsetTop + eVelY + "px"; // change y position
-
-	if (document.getElementById('enemy').offsetLeft + eSize <= 0 && eVelX < 0) { document.getElementById('enemy').style.left = window.innerWidth + "px"; }
-	if (document.getElementById('enemy').offsetLeft >= window.innerWidth && eVelX > 0) { document.getElementById('enemy').style.left = 0 - eSize + "px"; }
-}
-
-function gameTick () // processes and outputs frame changes
-{
-	ground = Math.floor(window.innerHeight / 20) * 20;
-
-	document.getElementById('player').style.width = pSize; document.getElementById('player').style.height = pSize;
-	document.getElementById('enemy').style.width = eSize; document.getElementById('enemy').style.height = eSize;
-
-	pMove();
-	eMove();
-
-	if (touching() == 2)
-	{
-		pSize += 10;
-		eSize -= 5 + Math.floor(pSize / 10);
-		if (eSize < 10)
-		{
-			eSize = 50 + Math.floor(pSize / 3);
-			score += 1;
-			document.getElementById('enemy').style.left = window.innerWidth / 4 * 3;
-			document.getElementById('enemy').style.top = 0 - eSize;
-		}
-		else
-		{
-			pVelY = eVelY - 15;
-			document.getElementById('player').style.top = document.getElementById('enemy').offsetTop - pSize;
-		}
-	}
-	else if (touching() == 0)
-	{
-		pSize -= 5 + Math.floor(eSize / 20);
-		eSize += 5;
-		if (pSize < 10)
-		{
-			pSize = 50;
-			score = 0;
-			document.getElementById('player').style.left = window.innerWidth / 4;
-			document.getElementById('player').style.top = 0 - pSize;
-		}
-		else
-		{
-			pVelX = eVelX * 1.5;
-			pVelY -= 10;
-			eVelX *= -1;
-			document.getElementById('enemy').style.top = document.getElementById('enemy').offsetTop - 5;
-		}
-	}
-
-	document.getElementById('score').textContent = "Score: " + score;
-	document.getElementById('size').textContent = "Size: " + pSize;
-
-	if (amogus && score >= 10 && pSize >= 500) { var audio = new Audio('AMOGUS.mp3'); audio.play(); amogus = false; } // funny amogus reward
-	else if (pSize < 500) { amogus = true; }
-}
-
-
-function jump () { if (document.getElementById('player').offsetTop + pSize >= ground) { pVelY -= 10 + Math.floor(Math.sqrt(eSize)); } } // standing on ground line: jump
-
-function left () { pVelX = -8 } // slide left
-
-function right () { pVelX = 8 } // slide right
-
-document.addEventListener('keydown', function(event) // checks for keys pressed
-{
-	if (event.keyCode == 38) { jump(); } // up arrow key
-	if (event.keyCode == 37) { left(); } // left arrow key
-	if (event.keyCode == 39) { right(); } // right arrow key
+	// W, A, S, D
+	if (event.keyCode == 65) keys[0] = 1;
+	if (event.keyCode == 87) keys[1] = 1;
+	if (event.keyCode == 68) keys[2] = 1;
+	if (event.keyCode == 83) keys[3] = 1;
+	// Left, up, right, down
+	if (event.keyCode == 37) keys[4] = 1;
+	if (event.keyCode == 38) keys[5] = 1;
+	if (event.keyCode == 39) keys[6] = 1;
+	if (event.keyCode == 40) keys[7] = 1;
 });
+
+// Checks which keys have been released
+document.addEventListener('keyup', function (event)
+{
+	// W, A, S, D
+	if (event.keyCode == 65) keys[0] = 0;
+	if (event.keyCode == 87) keys[1] = 0;
+	if (event.keyCode == 68) keys[2] = 0;
+	if (event.keyCode == 83) keys[3] = 0;
+	// Left, up, right, down
+	if (event.keyCode == 37) keys[4] = 0;
+	if (event.keyCode == 38) keys[5] = 0;
+	if (event.keyCode == 39) keys[6] = 0;
+	if (event.keyCode == 40) keys[7] = 0;
+});
+
+// Pauses and resumes current game
+function gameTogglePause()
+{
+	// If game is running, pause
+	if (interval != null) {
+		clearInterval(interval);
+		interval = null;
+		document.getElementById('pauseButton').textContent = "Resume";
+		document.getElementById('pauseMenu').style.display = "block";
+	}
+	// If game is paused, resume
+	else
+	{
+		if (gameMode == 0) interval = setInterval(singleGame, 20);
+		else if (gameMode == 1) interval = setInterval(duoGame, 20);
+		else if (gameMode == 2) interval = setInterval(pvpGame, 20);
+		document.getElementById('pauseButton').textContent = "Pause";
+		document.getElementById('pauseMenu').style.display = "none";
+	}
+}
+
+// Ends current game and resets variables
+function gameEnd()
+{
+	// Clear game interval and delete all clones
+	clearInterval(interval);
+	for (var i = 0; i < clones.length; i++) arena.removeChild(clones[i]);
+	clones.length = 0;
+
+	// Reset game display elements and show main menu
+	document.getElementById('menu').style.display = "block";
+	document.getElementById('game').style.display = "none";
+	document.getElementById('pauseMenu').style.display = "none";
+	document.getElementById('pauseButton').textContent = "Pause";
+	document.getElementById('stageText').textContent = "Stage 1";
+	document.getElementById('leftText').textContent = "";
+	document.getElementById('rightText').textContent = "";
+
+	// Reset kill counts
+	player1Kills = 0;
+	player2Kills = 0;
+
+	// If a stages game mode was played
+	if (gameMode == 0 || gameMode == 1)
+	{
+		stage = 0;
+		enemies.length = 0;
+		enemyLeftMove.length = 0;
+		aliveEnemies = 0;
+	}
+}
+
+// Initializes game based on which game-mode is selected
+function gameStart(mode)
+{
+	// Stores selected game mode and sets arena size
+	gameMode = mode;
+	arenaWidth = window.innerWidth * 0.9;
+	arenaHeight = window.innerHeight * 0.8;
+
+	// Hides menu GUI and displays game elements
+	document.getElementById('menu').style.display = "none";
+	document.getElementById('game').style.display = "block";
+	arena.style.width = arenaWidth;
+	arena.style.height = arenaHeight;
+
+	// Single player
+	if (mode == 0)
+	{
+		// Clone Amogus and health bar sprites
+		clones.push(sprites[1].cloneNode(true));
+		clones.push(sprites[0].cloneNode(true));
+
+		// Add sprites to arena
+		arena.appendChild(clones[0]);
+		arena.appendChild(clones[1]);
+
+		// Initialize player 1 Amogus object and start game
+		player1 = new Amogus(clones[0], clones[1], 0, 0);
+		interval = setInterval(singleGame, 20);
+	}
+
+	// Two player
+	else if (mode == 1)
+	{
+		// Clone Amogus and health bar sprites
+		clones.push(sprites[1].cloneNode(true));
+		clones.push(sprites[0].cloneNode(true));
+		clones.push(sprites[7].cloneNode(true));
+		clones.push(sprites[0].cloneNode(true));
+
+		// Add sprites to arena
+		arena.appendChild(clones[0]);
+		arena.appendChild(clones[1]);
+		arena.appendChild(clones[2]);
+		arena.appendChild(clones[3]);
+
+		// Initialize player 1 and 2 Amogus objects and start game
+		player1 = new Amogus(clones[0], clones[1], 0, 0);
+		player2 = new Amogus(clones[2], clones[3], arenaWidth, 0);
+		interval = setInterval(duoGame, 20);
+	}
+
+	// Player vs player
+	else if (mode == 2)
+	{
+		// Remove stage text
+		document.getElementById('stageText').textContent = "";
+
+		// Clone Amogus and health bar sprites
+		clones.push(sprites[1].cloneNode(true));
+		clones.push(sprites[0].cloneNode(true));
+		clones.push(sprites[7].cloneNode(true));
+		clones.push(sprites[0].cloneNode(true));
+
+		// Add sprites to arena
+		arena.appendChild(clones[0]);
+		arena.appendChild(clones[1]);
+		arena.appendChild(clones[2]);
+		arena.appendChild(clones[3]);
+
+		// Initialize player 1 and 2 Amogus objects and start game
+		player1 = new Amogus(clones[0], clones[1], 0, 0);
+		player2 = new Amogus(clones[2], clones[3], arenaWidth, 0);
+		interval = setInterval(pvpGame, 20);
+	}
+}
+
+// Game tick function for single player
+function singleGame()
+{
+	// Start next stage when all enemies are defeated
+	if (aliveEnemies == 0)
+	{
+		// Clone Amogus and health bar sprites
+		clones.push(sprites[Math.floor(Math.random() * (sprites.length - 2)) + 1].cloneNode(true));
+		clones.push(sprites[0].cloneNode(true));
+
+		// Add sprites to arena
+		arena.appendChild(clones[clones.length-2]);
+		arena.appendChild(clones[clones.length-1]);
+
+		// Add Amogus object to enemies
+		enemies.push(new Amogus(clones[clones.length - 2], clones[clones.length - 1], arenaWidth, 0, Math.random() * 3 + 3, Math.random() * (stage * 10) + 25, Math.random() * (stage / 2) + 2, Math.random() * (stage / 2) + 2, "#FF3333"));
+		enemyLeftMove.push(Math.floor(Math.random() * 2));
+		aliveEnemies = enemies.length;
+		stage++;
+
+		// Respawn all currently existing enemies
+		for (var i = 0; i < enemies.length; i++)
+			enemies[i].respawn();
+	}
+
+	// Update current Amogus state for player 1 and enemies
+	player1.update(0, arenaHeight, 20, arenaWidth);
+	for (var i = 0; i < enemies.length; i++)
+		enemies[i].update(0, arenaHeight, 20, arenaWidth);
+
+	// Check if player or enemies are touching and deal respective damage
+	var touch;
+	for (var i = 0; i < enemies.length; i++)
+	{
+		touch = player1.touching(enemies[i]);
+		if (touch == 2)
+		{
+			if (enemies[i].takeDamage(player1))
+			{
+				player1Kills++;
+				aliveEnemies--;
+			}
+		}
+		else if (touch == 1 || touch == -1)
+		{
+			if (player1.takeDamage(enemies[i]))
+			{
+				var audio = new Audio('AMOGUS.mp3');
+				audio.play();
+				gameEnd();
+			}
+		}
+	}
+
+	// Update on-screen text displays
+	document.getElementById('stageText').textContent = "Stage " + stage;
+	document.getElementById('leftText').textContent = "Kills: " + player1Kills;
+	document.getElementById('rightText').textContent = "Enemies: " + aliveEnemies;
+
+	// Check player 1 key presses and move Amogus
+	if (keys[0] == 1 && keys[2] == 0) player1.left(); // W key
+	if (keys[1] == 1) player1.jump(arenaHeight); // A key
+	if (keys[2] == 1 && keys[0] == 0) player1.right(); // S key
+	if (keys[3] == 1) player1.crouch(); // D key
+
+	// Enemy movements
+	for (var i = 0; i < enemies.length; i++)
+	{
+		// Randomized enemy movements with some player tracking
+		if (Math.random() * 100 <= 1)
+		{
+			if (player1.yPos + player1.size < enemies[i].yPos && Math.abs(player1.xPos + player1.size / 2 - enemies[i].xPos - enemies[i].size / 2) < player1.size)
+				enemyLeftMove[i] *= -1;
+			else if (player1.xPos > enemies[i].xPos)
+				enemyLeftMove[i] = -1;
+			else
+				enemyLeftMove[i] = 1;
+		}
+
+		// Move enemy Amogus
+		if (Math.floor(Math.random() * 125) <= 1)
+			enemies[i].jump(arenaHeight);
+		if (enemyLeftMove[i] == 1)
+			enemies[i].left();
+		else
+			enemies[i].right();
+	}
+}
+
+// Game tick function for two player
+function duoGame() { document.getElementById('stageText').textContent = "Coming Soon"; }
+
+// Game tick function for pvp
+function pvpGame()
+{
+	// Update current Amogus state for both players
+	player1.update(0, arenaHeight, 20, arenaWidth);
+	player2.update(0, arenaHeight, 20, arenaWidth);
+
+	// Check if players are touching and deal respective damage
+	var touch = player1.touching(player2);
+	if (touch == 2)
+	{
+		if (player2.takeDamage(player1))
+		{
+			player1Kills++;
+			player2.respawn();
+		}
+	}
+	else if (touch == -1)
+	{
+		if (player1.takeDamage(player2))
+		{
+			player2Kills++;
+			player1.respawn();
+		}
+	}
+
+	// Update on-screen text displays
+	document.getElementById('leftText').textContent = "P1 Kills: " + player1Kills;
+	document.getElementById('rightText').textContent = "P2 Kills: " + player2Kills;
+
+	// Check player 1 key presses and move Amogus
+	if (keys[0] == 1 && keys[2] == 0) player1.left(); // W key
+	if (keys[1] == 1) player1.jump(arenaHeight); // A key
+	if (keys[2] == 1 && keys[0] == 0) player1.right(); // S key
+	if (keys[3] == 1) player1.crouch(); // D key
+
+	// Check player 2 key presses and move Amogus
+	if (keys[4] == 1 && keys[6] == 0) player2.left(); // left arrow key
+	if (keys[5] == 1) player2.jump(arenaHeight); // up arrow key
+	if (keys[6] == 1 && keys[4] == 0) player2.right(); // right arrow key
+	if (keys[7] == 1) player2.crouch(); // down arrow key
+}
