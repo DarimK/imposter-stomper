@@ -61,8 +61,7 @@ function gameTogglePause()
 	else
 	{
 		if (gameMode == 0) interval = setInterval(singleGame, 20);
-		else if (gameMode == 1) interval = setInterval(duoGame, 20);
-		else if (gameMode == 2) interval = setInterval(pvpGame, 20);
+		else if (gameMode == 1) interval = setInterval(pvpGame, 20);
 		document.getElementById('pauseButton').textContent = "Pause";
 		document.getElementById('pauseMenu').style.display = "none";
 	}
@@ -129,29 +128,8 @@ function gameStart(mode)
 		interval = setInterval(singleGame, 20);
 	}
 
-	// Two player
-	else if (mode == 1)
-	{
-		// Clone Amogus and health bar sprites
-		clones.push(sprites[1].cloneNode(true));
-		clones.push(sprites[0].cloneNode(true));
-		clones.push(sprites[7].cloneNode(true));
-		clones.push(sprites[0].cloneNode(true));
-
-		// Add sprites to arena
-		arena.appendChild(clones[0]);
-		arena.appendChild(clones[1]);
-		arena.appendChild(clones[2]);
-		arena.appendChild(clones[3]);
-
-		// Initialize player 1 and 2 Amogus objects and start game
-		player1 = new Amogus(clones[0], clones[1], 0, 0);
-		player2 = new Amogus(clones[2], clones[3], arenaWidth, 0);
-		interval = setInterval(duoGame, 20);
-	}
-
 	// Player vs player
-	else if (mode == 2)
+	else if (mode == 1)
 	{
 		// Remove stage text
 		document.getElementById('stageText').textContent = "";
@@ -263,9 +241,6 @@ function singleGame()
 			enemies[i].right();
 	}
 }
-
-// Game tick function for two player
-function duoGame() { document.getElementById('stageText').textContent = "Coming Soon"; }
 
 // Game tick function for pvp
 function pvpGame()
