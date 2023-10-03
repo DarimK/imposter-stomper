@@ -200,8 +200,7 @@ function singleGame()
 		{
 			if (player1.takeDamage(enemies[i]))
 			{
-				var audio = new Audio('AMOGUS.mp3');
-				audio.play();
+				document.getElementById('AMOGUS').play();
 				gameEnd();
 			}
 		}
