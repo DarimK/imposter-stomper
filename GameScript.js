@@ -17,6 +17,11 @@ var aliveEnemies = 0;
 var enemyLeftMove = [];
 
 
+function initAudio() {
+	document.getElementById('AMOGUS').play();
+	document.getElementById('AMOGUS').pause();
+}
+
 // Checks which keys have been pressed
 document.addEventListener('keydown', function (event)
 {
