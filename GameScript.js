@@ -18,8 +18,7 @@ var enemyLeftMove = [];
 
 
 function initAudio() {
-	document.getElementById('AMOGUS').play();
-	document.getElementById('AMOGUS').pause();
+	document.getElementById('AMOGUS').load();
 }
 
 // Checks which keys have been pressed
