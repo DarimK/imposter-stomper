@@ -10,7 +10,7 @@ var platforms = [];
 var clones = [];
 var interval;
 var keys = [0, 0, 0, 0, 0, 0, 0, 0];
-var mousePos;
+var touchPos;
 var gameMode;
 var player1Kills = 0;
 var player2Kills = 0;
@@ -107,25 +107,27 @@ function posToKeys(pos) {
 }
 
 arena.addEventListener('touchstart', function (event) {
-	let mouseX = (event.clientX - arena.offsetLeft) + arenaWidth / 2;
-	let mouseY = (event.clientY - arena.offsetTop) + arenaHeight / 2;
-	mousePos = [[mouseX, mouseY], null];
-	document.getElementById('circle').style.left = event.clientX + "px";
-	document.getElementById('circle').style.top = event.clientY + "px";
+	let touch = event.targetTouches[0];
+	let touchX = (touch.pageX - arena.offsetLeft) + arenaWidth / 2;
+	let touchY = (touch.pageY - arena.offsetTop) + arenaHeight / 2;
+	touchPos = [[touchX, touchY], null];
+	document.getElementById('circle').style.left = touch.pageX + "px";
+	document.getElementById('circle').style.top = touch.pageY + "px";
 	document.getElementById('circle').style.display = "block";
 });
 
 document.addEventListener('touchend', function () {
-	mousePos = null;
+	touchPos = null;
 	keys = [0, 0, 0, 0, 0, 0, 0, 0];
 	document.getElementById('circle').style.display = "none";
 });
 
 arena.addEventListener('touchmove', function (event) {
-	if (mousePos) {
-		let mouseX = (event.clientX - arena.offsetLeft) + arenaWidth / 2;
-		let mouseY = (event.clientY - arena.offsetTop) + arenaHeight / 2;
-		mousePos = [mousePos[0], [mouseX, mouseY]];
+	if (touchPos && touchPos[0]) {
+		let touch = event.targetTouches[0];
+		let touchX = (touch.pageX - arena.offsetLeft) + arenaWidth / 2;
+		let touchY = (touch.pageY - arena.offsetTop) + arenaHeight / 2;
+		touchPos = [touchPos[0], [touchX, touchY]];
     }
 });
 
@@ -355,7 +357,7 @@ function addPlatform(xStart, yStart, xEnd, yEnd, size, speed, passable = true) {
 // Game tick function for single player
 function singleGame()
 {
-	posToKeys(mousePos);
+	posToKeys(touchPos);
 	// Start next stage when all enemies are defeated
 	if (aliveEnemies == 0 && player1.pos.y + player1.size < 0) {
 		// check if player pos+size < 0, put player at bottom of screen, give a -y boost and spawn platform
