@@ -106,7 +106,7 @@ function posToKeys(pos) {
     }
 }
 
-arena.addEventListener('ontouchstart', function (event) {
+arena.addEventListener('touchstart', function (event) {
 	let mouseX = (event.clientX - arena.offsetLeft) + arenaWidth / 2;
 	let mouseY = (event.clientY - arena.offsetTop) + arenaHeight / 2;
 	mousePos = [[mouseX, mouseY], null];
@@ -115,13 +115,13 @@ arena.addEventListener('ontouchstart', function (event) {
 	document.getElementById('circle').style.display = "block";
 });
 
-document.addEventListener('ontouchend', function () {
+document.addEventListener('touchend', function () {
 	mousePos = null;
 	keys = [0, 0, 0, 0, 0, 0, 0, 0];
 	document.getElementById('circle').style.display = "none";
 });
 
-arena.addEventListener('ontouchmove', function (event) {
+arena.addEventListener('touchmove', function (event) {
 	if (mousePos) {
 		let mouseX = (event.clientX - arena.offsetLeft) + arenaWidth / 2;
 		let mouseY = (event.clientY - arena.offsetTop) + arenaHeight / 2;
