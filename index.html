@@ -1,69 +1,84 @@
-<html>
-	<head>
-		<title>Imposter Stomper</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Funny sus Among Us game with lots of bouncing.">
-		<meta name="image" content="Gifs/Rainbow.gif">
-		<link rel="icon" type="image/x-icon" href="Gifs/Rainbow.gif">
-	</head>
+﻿<html>
+<head>
+    <title>Imposter Stomper</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Funny sus Among Us game with lots of bouncing.">
+    <meta name="image" content="Gifs/Rainbow.gif">
+    <link rel="icon" type="image/x-icon" href="Gifs/Rainbow.gif">
+</head>
 
-	<body>
-		<div id="menu" class="item" style="position: absolute; top: 50%; left: 50%;">
-			<p style="margin: 0px; margin-bottom: 60px; font-size: 70px; font-weight: 700;">Imposter Stomper</p>
-			<button class="menuButton" onClick="gameStart(0); initAudio()">Single Player</button><br>
-			<button class="menuButton" onClick="gameStart(1)">PVP</button><br>
-			<button class="menuButton" onClick="document.getElementById('howToPlay').style.display = 'block'">How To Play</button>
-			<div id="howToPlay" class="item" style="position: absolute; top: 50%; left: 50%; display: none;">
-				<p style="font-size: 23px; font-weight: 500; width: 550px; height: 300px;">
-					Battle against the imposters and survive for as long as you can! 
-					To defeat an imposter, jump up and stomp on it for as long as possible.<br><br>
-					Single player: allows you to fight the imposters in stages<br>
-					PVP: allows you to battle a friend to see who is the strongest Imposter Stomper!<br><br>
-					Player 1 movement: WASD<br>Player 2 movement: arrow keys<br>
-				</p>
-				<br>
-				<button class="menuButton" onClick="document.getElementById('howToPlay').style.display = 'none'">Close</button>
-			</div>
-		</div>
+<body onload="initAudio()">
+    <div id="menu" class="item" style="position: absolute; top: 50%; left: 50%;">
+        <p style="margin: 0px; margin-bottom: 60px; font-size: 70px; font-weight: 700;">Imposter Stomper</p>
+        <button class="regButton" onClick="initAudio(); gameStart(0)">Single Player</button><br>
+        <button class="regButton" onClick="gameStart(1)">PVP</button><br>
+        <button class="regButton" onClick="document.getElementById('settings').style.display = 'block'">Settings</button><br>
+        <button class="regButton" onClick="document.getElementById('howToPlay').style.display = 'block'">How To Play</button>
 
-		<div id="game" style="display: none;">
-			<div id="arena" class="item" style="border: none; padding: 10px; position: absolute; top: 50%; left: 50%;">
-				<canvas id="healthBar" style="position: absolute; display: none; background-color: #660000;" height="5"></canvas>
+        <div id="settings" class="item" style="position: absolute; top: 50%; left: 50%; display: none;">
+            <button class="regButton" onClick="openFullScreen()">Full Screen</button><br>
+            <button id="audioButton" class="regButton" onClick="disableAudio()">Disable Audio</button><br>
+            <button class="regButton" onClick="document.getElementById('settings').style.display = 'none'">Close</button>
+        </div>
 
-				<img src="Gifs/Red.gif" id="Red" style="position: absolute; display: none;">
-				<img src="Gifs/Orange.gif" id="Orange" style="position: absolute; display: none;">
-				<img src="Gifs/Yellow.gif" id="Yellow" style="position: absolute; display: none;">
-				<img src="Gifs/Lime.gif" id="Lime" style="position: absolute; display: none;">
-				<img src="Gifs/Green.gif" id="Green" style="position: absolute; display: none;">
-				<img src="Gifs/Cyan.gif" id="Cyan" style="position: absolute; display: none;">
-				<img src="Gifs/Blue.gif" id="Blue" style="position: absolute; display: none;">
-				<img src="Gifs/Purple.gif" id="Purple" style="position: absolute; display: none;">
-				<img src="Gifs/Pink.gif" id="Pink" style="position: absolute; display: none;">
-				<img src="Gifs/White.gif" id="White" style="position: absolute; display: none;">
-				<img src="Gifs/Brown.gif" id="Brown" style="position: absolute; display: none;">
-				<img src="Gifs/Black.gif" id="Black" style="position: absolute; display: none;">
-				<img src="Gifs/Rainbow.gif" id="Secret" style="position: absolute; display: none;">
-			</div>
+        <div id="howToPlay" class="item" style="position: absolute; top: 50%; left: 50%; display: none;">
+            <p style="font-size: 23px; font-weight: 500; width: 550px; height: 350px;">
+                Battle against the imposters and beat the imposter boss at stage 100!
+                To defeat an imposter, jump up and stomp on it for as long as possible.<br><br>
+                Single player: allows you to fight the imposters in story mode.
+                Use the platforms to jump up to the next stage!<br><br>
+                PVP: allows you to battle a friend to see who is the strongest Imposter Stomper!<br><br>
+                How to move: WASD, arrow keys, or click and drag joystick.<br><br>
+                Note: game isn't done yet, so things may look a bit rough :)
+            </p>
+            <br>
+            <button class="regButton" onClick="document.getElementById('howToPlay').style.display = 'none'">Close</button>
+        </div>
+    </div>
 
-			<button id="pauseButton" class="menuButton" onClick="gameTogglePause()" style="font-size: 3.5vh; margin: 1.5vh; width: 15vh; height: 6vh; border-width: 0.5vh; border-radius: 1vh; position: absolute; top: 0; left: 0;">Pause</button>
-			<button class="menuButton" onClick="gameEnd()" style="font-size: 3.5vh; margin: 1.5vh; width: 15vh; height: 6vh; border-width: 0.5vh; border-radius: 1vh; position: absolute; top: 0; right: 0;">Exit</button>
-			<p id="stageText" style="font-size: 6vh; font-weight: 500; text-align: center;">Stage 1</p>
-			<p id="leftText" style="font-size: 2.5vh; font-weight: 500; position: absolute; bottom: 0; left: 3vh;"></p>
-			<p id="rightText" style="font-size: 2.5vh; font-weight: 500; position: absolute; bottom: 0; right: 3vh;"></p>
+    <div id="game" style="display: none;">
+        <div id="arena" class="arena">
+            <canvas id="bar" style="position: absolute; display: none; background-color: rgba(127, 0, 0, 0.5);" height="5"></canvas>
 
-			<div id="pauseMenu" class="item" style="display: none; position: absolute; top: 50%; left: 50%;">
-				<p style="font-size: 10vh; font-weight: 500; text-align: center;">Game Is Paused</p>
-			</div>
-		</div>
+            <img src="Gifs/Red.gif" id="Red" style="position: absolute; display: none;">
+            <img src="Gifs/Orange.gif" id="Orange" style="position: absolute; display: none;">
+            <img src="Gifs/Yellow.gif" id="Yellow" style="position: absolute; display: none;">
+            <img src="Gifs/Lime.gif" id="Lime" style="position: absolute; display: none;">
+            <img src="Gifs/Green.gif" id="Green" style="position: absolute; display: none;">
+            <img src="Gifs/Cyan.gif" id="Cyan" style="position: absolute; display: none;">
+            <img src="Gifs/Blue.gif" id="Blue" style="position: absolute; display: none;">
+            <img src="Gifs/Purple.gif" id="Purple" style="position: absolute; display: none;">
+            <img src="Gifs/Pink.gif" id="Pink" style="position: absolute; display: none;">
+            <img src="Gifs/White.gif" id="White" style="position: absolute; display: none;">
+            <img src="Gifs/Brown.gif" id="Brown" style="position: absolute; display: none;">
+            <img src="Gifs/Black.gif" id="Black" style="position: absolute; display: none;">
+            <img src="Gifs/Rainbow.gif" id="Secret" style="position: absolute; display: none;">
+        </div>
 
-		<audio id="AMOGUS">
-        		<source src="AMOGUS.mp3" type="audio/mp3">
-        		<source src="AMOGUS.ogg" type="audio/ogg">
-    		</audio>
-		
-		<script src="Amogus.js"></script>
-		<script src="GameScript.js"></script>
-		<link rel="stylesheet" href="GameStyle.css">
-	</body>
+        <canvas id="circle" style="position: absolute; display: none; transform: translate(-50%, -50%);"></canvas>
+        <button id="pauseButton" class="regButton" onClick="gameTogglePause()" style="font-size: 3.5vh; margin: 1.5vh; width: 15vh; height: 6vh; border-width: 0.5vh; border-radius: 1vh; position: absolute; top: 0; left: 0;">Pause</button>
+        <button class="regButton" onClick="gameEnd()" style="font-size: 3.5vh; margin: 1.5vh; width: 15vh; height: 6vh; border-width: 0.5vh; border-radius: 1vh; position: absolute; top: 0; right: 0;">Exit</button>
+        <p id="leftText" style="font-size: 2.5vh; font-weight: 500; position: absolute; bottom: 0; left: 3vh;"></p>
+        <p id="rightText" style="font-size: 2.5vh; font-weight: 500; position: absolute; bottom: 0; right: 3vh;"></p>
+        <div id="stageText" style="font-size: 6vh; font-weight: 500; text-align: center; position: absolute; top: 0; left: 50vw; transform: translate(-50%, 0%);">Stage 1</div>
+
+        <div id="upgradeMenu" class="item" style="display: none; position: absolute; top: 50%; left: 50%;">
+            Upgrades
+            <div id="upgradeText"></div>
+            <button id="upgradeButton" class="regButton" style="display: none;"></button>
+        </div>
+
+        <div id="pauseMenu" class="item" style="display: none; position: absolute; top: 50%; left: 50%;">
+            <p style="font-size: 10vh; font-weight: 500; text-align: center;">Game Is Paused</p>
+        </div>
+    </div>
+
+    <script src="AudioManager.js"></script>
+    <script src="Platform.js"></script>
+    <script src="Amogus.js"></script>
+    <script src="GameScript.js"></script>
+    <script src="UpgradeManager.js"></script>
+    <link rel="stylesheet" href="GameStyle.css">
+</body>
 </html>
