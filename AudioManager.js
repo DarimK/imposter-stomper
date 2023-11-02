@@ -22,11 +22,11 @@ class AudioManager
     start(name) {
         this.audios[name].currentTime = 0;
         this.audios[name].play();
-        this.playing[name] = true;
     }
 
     loop(name) {
         this.audios[name].loop = true;
+        this.playing[name] = true;
         this.start(name);
     }
 
