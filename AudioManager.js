@@ -42,11 +42,6 @@ class AudioManager
         if (this.audios[name].currentTime < 0.1)
             return;
 
-        this.audios[name].volume = 0.99;
-        if (this.audios[name].volume == 1)
-            fadeout = 0;
-        this.audios[name].volume = 1;
-
         let audioM = this;
 
         if (fadeout == 0) {
@@ -58,9 +53,10 @@ class AudioManager
 
         else {
             let tick = 10 * fadeout;
+            let count = 100;
 
             let interval = setInterval(function () {
-                if (audioM.audios[name].volume <= 0.01) {
+                if (count <= 1) {
                     audioM.audios[name].pause();
                     audioM.audios[name].currentTime = 0;
                     audioM.audios[name].loop = false;
@@ -68,8 +64,10 @@ class AudioManager
                     audioM.playing[name] = false;
                     clearInterval(interval);
                 }
-                else
+                else {
+                    count--;
                     audioM.audios[name].volume -= 0.01;
+                }
             }, tick);
         }
     }
