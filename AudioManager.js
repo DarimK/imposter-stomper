@@ -42,6 +42,11 @@ class AudioManager
         if (this.audios[name].currentTime < 0.1)
             return;
 
+        this.audios[name].volume = 0.99;
+        if (this.audios[name].volume == 1)
+            fadeout = 0;
+        this.audios[name].volume = 1;
+
         let audioM = this;
 
         if (fadeout == 0) {
@@ -64,7 +69,7 @@ class AudioManager
                     clearInterval(interval);
                 }
                 else
-                    audioM.audios[name].volume = audioM.audios[name].volume - 0.01;
+                    audioM.audios[name].volume -= 0.01;
             }, tick);
         }
     }
