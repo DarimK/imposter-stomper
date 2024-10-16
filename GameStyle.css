@@ -19,6 +19,10 @@ body {
 	user-select: none; /* Default */
 }
 
+img {
+	transition: transform 0.1s linear;
+}
+
 .arena {
 	text-align: center;
 	border: none;
@@ -48,7 +52,7 @@ body {
 	width: 250px;
 	margin: 5px auto;
 	cursor: pointer;
-	transition-duration: 0.5s;
+	transition: background-color 0.5s ease;
 	color: #DFDFDF;
 	background-color: #424242;
 	border-color: #666666;
