@@ -1,0 +1,15 @@
+{
+  "name": "Imposter Stomper",
+  "short_name": "amogus",
+  "icons": [
+    {
+      "src": "/Gifs/Rainbow.gif",
+      "sizes": "100x100",
+      "type": "image/gif",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#7f7f7f",
+  "background_color": "#000000",
+  "display": "standalone"
+}
