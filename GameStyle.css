@@ -46,18 +46,21 @@ img {
 
 .regButton {
 	font-size: 35px;
-	font-family: Calibri, Arial;
-	border: 4px solid;
-	border-radius: 8px;
 	width: 250px;
-	margin: 5px auto;
-	cursor: pointer;
-	transition: background-color 0.5s ease;
-	color: #DFDFDF;
-	background-color: #424242;
-	border-color: #666666;
 }
 
-.regButton:hover {
+button {
+	font-family: Calibri, Arial;
+	font-size: 20px;
+	margin: 5px auto;
+	border: 4px solid #666666;
+	border-radius: 8px;
+	color: #DFDFDF;
+	background-color: #424242;
+	cursor: pointer;
+	transition: background-color 0.5s ease;
+}
+
+button:hover {
 	background-color: #666666;
 }

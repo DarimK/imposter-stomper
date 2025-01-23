@@ -1,5 +1,5 @@
-﻿<html>
-<html lang="en">
+﻿<html lang="en">
+<head>
     <!-- Important -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover, user-scalable=no">
@@ -69,7 +69,21 @@
         <div id="settings" class="item" style="position: absolute; top: 50%; left: 50%; display: none;">
             <button class="regButton" onClick="openFullScreen()">Full Screen</button><br>
             <button id="audioButton" class="regButton" onClick="disableAudio()">Disable Audio</button><br>
+            <button class="regButton" onClick="toggleKeybindChange()">Keybinds</button><br>
             <button class="regButton" onClick="document.getElementById('settings').style.display = 'none'">Close</button>
+        </div>
+
+        <div id="keybinds" class="item" style="position: absolute; top: 50%; left: 50%; display: none;">
+            <div style="font-size: 23px; margin-bottom: 10px;">Select an input and press a key to replace it</div>
+            <div>Player 1 Left: <button onclick="selectedKey = 'left1'"></button></div>
+            <div>Player 1 Up: <button onclick="selectedKey = 'up1'"></button></div>
+            <div>Player 1 Right: <button onclick="selectedKey = 'right1'"></button></div>
+            <div>Player 1 Down: <button onclick="selectedKey = 'down1'"></button></div>
+            <div>Player 2 Left: <button onclick="selectedKey = 'left2'"></button></div>
+            <div>Player 2 Up: <button onclick="selectedKey = 'up2'"></button></div>
+            <div>Player 2 Right: <button onclick="selectedKey = 'right2'"></button></div>
+            <div>Player 2 Down: <button onclick="selectedKey = 'down2'"></button></div>
+            <button class="regButton" onClick="toggleKeybindChange()">Close</button>
         </div>
 
         <div id="howToPlay" class="item" style="position: absolute; top: 50%; left: 50%; display: none;">

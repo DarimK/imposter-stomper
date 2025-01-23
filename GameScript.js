@@ -9,7 +9,6 @@ var enemies = [];
 var platforms = [];
 var clones = [];
 var interval;
-var keys = [0, 0, 0, 0, 0, 0, 0, 0];
 var touchPos;
 var gameMode;
 var player1Kills = 0;
@@ -19,37 +18,79 @@ var aliveEnemies = 0;
 var enemyLeftMove = [];
 var audio;
 var upgrades1;
+
+var keys = [0, 0, 0, 0, 0, 0, 0, 0];
+var keybinds = {
+	left1: "a",
+	up1: "w",
+	right1: "d",
+	down1: "s",
+	left2: "ArrowLeft",
+	up2: "ArrowUp",
+	right2: "ArrowRight",
+	down2: "ArrowDown",
+};
+var keybindChange = false;
+var selectedKey;
+
 // CLEAN UP THE CODE FOR PLATFORMS AND CREATE THE RANDOM WITH CLONING ADDITION FOR THEM, ALSO DEAL WITH CLEANER STAGE TRANSITION AND A FIX FOR THE ROOF BUG (MAYBE GET RID OF ROOF)
+// man this code sucks
+
+function showKeybinds() {
+	const keybindButtons = document.querySelectorAll("#keybinds>div>button");
+	keybindButtons[0].textContent = keybinds.left1;
+	keybindButtons[1].textContent = keybinds.up1;
+	keybindButtons[2].textContent = keybinds.right1;
+	keybindButtons[3].textContent = keybinds.down1;
+	keybindButtons[4].textContent = keybinds.left2;
+	keybindButtons[5].textContent = keybinds.up2;
+	keybindButtons[6].textContent = keybinds.right2;
+	keybindButtons[7].textContent = keybinds.down2;
+}
 
 // Checks which keys have been pressed
 document.addEventListener('keydown', function (event)
 {
-	// A, W, D, S
-	if (event.keyCode == 65) keys[0] = 1;
-	if (event.keyCode == 87) keys[1] = 1;
-	if (event.keyCode == 68) keys[2] = 1;
-	if (event.keyCode == 83) keys[3] = 1;
 	// Left, up, right, down
-	if (event.keyCode == 37) keys[4] = 1;
-	if (event.keyCode == 38) keys[5] = 1;
-	if (event.keyCode == 39) keys[6] = 1;
-	if (event.keyCode == 40) keys[7] = 1;
+	if (event.key == keybinds.left1) keys[0] = 1;
+	if (event.key == keybinds.up1) keys[1] = 1;
+	if (event.key == keybinds.right1) keys[2] = 1;
+	if (event.key == keybinds.down1) keys[3] = 1;
+	if (event.key == keybinds.left2) keys[4] = 1;
+	if (event.key == keybinds.up2) keys[5] = 1;
+	if (event.key == keybinds.right2) keys[6] = 1;
+	if (event.key == keybinds.down2) keys[7] = 1;
+
+	if (keybindChange) {
+		keybinds[selectedKey] = event.key;
+		showKeybinds();
+	}
 });
 
 // Checks which keys have been released
 document.addEventListener('keyup', function (event)
 {
-	// A, W, D, S
-	if (event.keyCode == 65) keys[0] = 0;
-	if (event.keyCode == 87) keys[1] = 0;
-	if (event.keyCode == 68) keys[2] = 0;
-	if (event.keyCode == 83) keys[3] = 0;
 	// Left, up, right, down
-	if (event.keyCode == 37) keys[4] = 0;
-	if (event.keyCode == 38) keys[5] = 0;
-	if (event.keyCode == 39) keys[6] = 0;
-	if (event.keyCode == 40) keys[7] = 0;
+	if (event.key == keybinds.left1) keys[0] = 0;
+	if (event.key == keybinds.up1) keys[1] = 0;
+	if (event.key == keybinds.right1) keys[2] = 0;
+	if (event.key == keybinds.down1) keys[3] = 0;
+	if (event.key == keybinds.left2) keys[4] = 0;
+	if (event.key == keybinds.up2) keys[5] = 0;
+	if (event.key == keybinds.right2) keys[6] = 0;
+	if (event.key == keybinds.down2) keys[7] = 0;
 });
+
+function toggleKeybindChange() {
+	if (keybindChange) {
+		keybindChange = false;
+		document.getElementById("keybinds").style.display = "none";
+	} else {
+		keybindChange = true;
+		document.getElementById("keybinds").style.display = "block";
+		showKeybinds();
+	}
+}
 
 function posToKeys(pos) {
 	if (pos == null || pos[1] == null)
