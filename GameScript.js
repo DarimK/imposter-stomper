@@ -379,8 +379,10 @@ function addEnemy(speed, maxHealth, regen, damage, resistance, sprite = Math.flo
 	arena.appendChild(clones[clones.length - 1]);
 
 	// Add Amogus object to enemies
-	enemies.push(new Amogus(clones[clones.length - 2], clones[clones.length - 1], Math.floor(Math.random() * arenaWidth - (50 + maxHealth / 2)), -Math.floor(Math.random() * arenaHeight) - (50 + maxHealth / 2), speed, maxHealth, regen, damage, resistance, "#FF3333"));
+	const amogus = new Amogus(clones[clones.length - 2], clones[clones.length - 1], Math.floor(Math.random() * arenaWidth - (50 + maxHealth / 2)), -Math.floor(Math.random() * arenaHeight) - (50 + maxHealth / 2), speed, maxHealth, regen, damage, resistance, "#FF3333");
+	enemies.push(amogus);
 	enemyLeftMove.push(Math.floor(Math.random() * 2));
+	return amogus;
 }
 
 // Creates and adds a Platform to the arena
@@ -430,18 +432,24 @@ function singleGame()
         }
 		// Final boss
 		else if (stage == 100) {
-			addEnemy(
-				25,
+			const amogus = addEnemy(
+				5,
+				500,
+				1,
 				250,
-				50,
-				250,
-				25,
+				125,
 				sprites.length - 1
 			);
 			if (audio) {
 				audio.stopAll(1);
 				audio.loop('boss');
 			}
+			setTimeout(() => {
+				if (amogus) {
+					amogus.speed = 25;
+					amogus.maxHealth = 250;
+				}
+			}, 25000);
 		}
 		// Duel bosses
 		else if (stage % 23 == 0) {
@@ -449,17 +457,17 @@ function singleGame()
 			addEnemy(
 				3,
 				stage * 15,
-				stage * 3,
 				stage / 2,
-				1,
+				stage / 2,
+				stage / 2,
 				randSprite
 			);
 			addEnemy(
-				stage / 23 * 5,
-				100,
+				stage / 23 * 8,
+				50,
 				10,
-				stage,
-				stage / 23 * 3,
+				stage * 2,
+				stage / 23 * 4,
 				randSprite
 			);
 			if (audio) {
@@ -545,32 +553,26 @@ function singleGame()
 	if (keys[3] == 1) player1.crouch(arenaHeight); // S key
 
 	// Enemy movements
-	if (stage == 100) { // YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+	if (stage == 100) { // YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO this thing is cracked now
 		let xDist = Math.abs(player1.pos.x + player1.size / 2 - enemies[0].pos.x - enemies[0].size / 2);
 		if (xDist < player1.size / 2 + enemies[0].size / 2) {
-			if (player1.pos.y + player1.size < enemies[0].pos.y && Math.random() * 23 <= 1)
-				enemyLeftMove[0] *= -1;
+			if (player1.pos.y + player1.size < enemies[0].pos.y && (enemyLeftMove[0] === 0 || Math.random() * 23 <= 1))
+				enemyLeftMove[0] = enemyLeftMove[0] === 0 ? Math.random() * 2 - 1 : enemyLeftMove[0] * -1;
 			else if (enemies[0].pos.y + enemies[0].size < player1.pos.y) {
 				enemies[0].crouch(arenaHeight);
 				enemyLeftMove[0] = 0;
 			}
 		}
 		else if (xDist < player1.size + enemies[0].size) {
-			if (player1.pos.y + player1.size < enemies[0].pos.y && Math.random() * 23 <= 1)
-				enemyLeftMove[0] *= -1;
-			else if (enemies[0].pos.y + enemies[0].size < player1.pos.y)
+			if (player1.pos.y + player1.size < enemies[0].pos.y)
+				enemyLeftMove[0] = 0;
+			else
 				enemyLeftMove[0] = enemies[0].pos.x - player1.pos.x;
 		}
-		else if (enemies[0].pos.y + enemies[0].size < player1.pos.y) {
-			if (player1.pos.x > enemies[0].pos.x)
-				enemyLeftMove[0] = -1;
-			else
-				enemyLeftMove[0] = 1;
-		}
-		else if (Math.random() * 32 <= 1)
-			enemyLeftMove[0] *= -1;
+		else
+			enemyLeftMove[0] = enemies[0].pos.x - player1.pos.x;
 
-		if (enemies[0].pos.y + enemies[0].size > player1.pos.y)
+		if (enemies[0].pos.y + enemies[0].size > player1.pos.y && xDist < player1.size + enemies[0].size)
 			enemies[0].jump(arenaHeight);
 
 		if (enemyLeftMove[0] > 0)
