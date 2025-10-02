@@ -354,8 +354,8 @@ function gameStart(mode)
 		arena.appendChild(clones[3]);
 
 		// Initialize player 1 and 2 Amogus objects and start game
-		player1 = new Amogus(clones[0], clones[1], 0, 0);
-		player2 = new Amogus(clones[2], clones[3], arenaWidth, 0);
+		player1 = new Amogus(clones[0], clones[1], 0, 0, undefined, undefined, 0);
+		player2 = new Amogus(clones[2], clones[3], arenaWidth, 0, undefined, undefined, 0);
 
 		addPlatform(arenaWidth / 2 - 100, arenaHeight / 4, arenaWidth / 2 - 100, arenaHeight / 4, 200, 0);
 		addPlatform(arenaWidth / 2 - 300, arenaHeight / 4, arenaWidth / 8, arenaHeight - 100, 200, 5);
@@ -705,6 +705,14 @@ function pvpGame()
 		if (player2.takeDamage(player1))
 		{
 			player1Kills++;
+			player1.speed += 0.25;
+			player1.maxHealth += 10;
+			player1.health += 10;
+			player1.damage += 2.5;
+
+			player2.speed = player2.speed > 5 ? player2.speed - 0.25 : 5;
+			player2.maxHealth = player2.maxHealth > 50 ? player2.maxHealth - 10 : 50;
+			player2.damage = player2.damage > 5 ? player2.damage - 2.5 : 5;
 			player2.respawn();
 		}
 	}
@@ -713,6 +721,14 @@ function pvpGame()
 		if (player1.takeDamage(player2))
 		{
 			player2Kills++;
+			player2.speed += 0.25;
+			player2.maxHealth += 10;
+			player2.health += 10;
+			player2.damage += 2.5;
+
+			player1.speed = player1.speed > 5 ? player1.speed - 0.25 : 5;
+			player1.maxHealth = player1.maxHealth > 50 ? player1.maxHealth - 10 : 50;
+			player1.damage = player1.damage > 5 ? player1.damage - 2.5 : 5;
 			player1.respawn();
 		}
 	}
